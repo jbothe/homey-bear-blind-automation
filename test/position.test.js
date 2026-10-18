@@ -183,21 +183,22 @@ test('a move too small to be worth making is planned as nothing', () => {
     assert.ok(0.02 * UP_TIME < MIN_MOVE_MS && 0.05 * UP_TIME > MIN_MOVE_MS);
 });
 
-test('too uncertain to time, so anchor against an end stop first', () => {
+test('too uncertain to time, so anchor against the open end stop first', () => {
     const { tracker } = known(0.5);
     tracker.uncertainty = 1;
 
-    // Both anchors cost a full pessimistic run, so the cheaper one is decided by
-    // how far the target sits from each end and by the two travel times.
     assert.deepEqual(tracker.plan(0.9), [
         { direction: UP, limit: true, duration: UP_TIME * 1.1 },
         { direction: DOWN, limit: false, duration: 0.1 * DOWN_TIME },
     ]);
 
+    // The top even for a target the bottom would reach sooner, which it would
+    // here: the move then never extends past the position that was asked for.
     assert.deepEqual(tracker.plan(0.1), [
-        { direction: DOWN, limit: true, duration: DOWN_TIME * 1.1 },
-        { direction: UP, limit: false, duration: 0.1 * UP_TIME },
+        { direction: UP, limit: true, duration: UP_TIME * 1.1 },
+        { direction: DOWN, limit: false, duration: 0.9 * DOWN_TIME },
     ]);
+    assert.ok(DOWN_TIME * 1.1 + 0.1 * UP_TIME < UP_TIME * 1.1 + 0.9 * DOWN_TIME);
 });
 
 test('a confident estimate is left alone; an uncertain one is repaired', () => {

@@ -29,13 +29,20 @@ started, which way it went, and how long a full run takes.
   switch decides where it lands, which resets the count exactly. Most days include a full open and
   a full close, so this happens without anyone doing anything.
 * Partial moves are where the count drifts. Homey tracks how far out it might be, and past about
-  15% of full travel the next move to an intermediate position runs to the nearer end stop first
-  and times the rest from there. The **Recalibrate** flow card forces that on demand.
+  15% of full travel the next move to an intermediate position runs fully open first and times the
+  rest from there. Always open, never closed, even where closing would be quicker: the move then
+  never closes past the position that was asked for. The other way round is the dangerous half of
+  the guess — a floor-to-ceiling blind that encloses an outdoor area would run the whole way across
+  the opening, onto whatever or whoever is standing in it, and an awning would extend right out
+  over the patio first. Opening is the direction with nothing in its way, and the direction a wind
+  sensor sends an awning anyway. The **Recalibrate** flow card forces that on demand.
 * Handset presses are decoded off the air and counted the same way, including one left to run into
   an end stop.
 
 It cannot notice an obstruction, a wind sensor retracting an awning, or a command the motor missed.
 If a blind moves without Homey hearing about it, the position is wrong until the next run to an end.
+Obstructions are why the anchoring run above always goes open and never closed: the app has no way
+to tell that a blind has closed onto something, so it never closes further than it was asked to.
 
 ## Pairing
 

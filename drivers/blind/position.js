@@ -199,14 +199,21 @@ class Position {
         if (this.uncertainty > MAX_UNCERTAINTY) {
             // Too uncertain to time an intermediate position from here. Anchor
             // against an end stop first, then time the rest from a position that
-            // is known exactly. Both anchors cost a full pessimistic run, so the
-            // cheaper one depends only on the target and the two travel times.
-            const viaOpen = limitLeg(UP).duration + (1 - target) * this.downTime;
-            const viaClosed = limitLeg(DOWN).duration + target * this.upTime;
-            const direction = viaOpen <= viaClosed ? UP : DOWN;
-
-            legs.push(limitLeg(direction));
-            from = direction === UP ? 1 : 0;
+            // is known exactly.
+            //
+            // Always the open end, even where the closed one would get there
+            // sooner. Anchoring at the top bounds the move by the position that
+            // was asked for: the overshoot goes up into the housing, where there
+            // is nothing to hit. Via the bottom, a request for 40% would close
+            // the blind completely first — the whole way across the opening on a
+            // floor-to-ceiling blind that encloses an outdoor area, or right out
+            // over the patio on an awning — and nothing here can tell that it
+            // has closed onto a person, an animal or the furniture. Open is also
+            // where a wind sensor sends an awning. The cost is travel time on a
+            // low target, and only until the next run to an end makes the
+            // estimate certain again.
+            legs.push(limitLeg(UP));
+            from = 1;
         }
 
         const delta = target - from;
