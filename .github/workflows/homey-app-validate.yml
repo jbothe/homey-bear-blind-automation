@@ -13,3 +13,16 @@ jobs:
       - uses: athombv/github-action-homey-app-validate@master
         with:
           level: verified
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          # The app declares no dependencies and commits no lockfile, which
+          # the cache needs to key on.
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run tests
+        run: npm test
