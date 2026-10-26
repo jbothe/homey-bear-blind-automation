@@ -86,8 +86,13 @@
     "name": "John Bothe",
     "email": "jbothe@gmail.com"
   },
-  "bugs": {
-    "url": "https://github.com/jbothe/homey-bear-blind-automation/issues"
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "email": "jbothe@gmail.com",
+        "currency": "AUD"
+      }
+    }
   },
   "support": "https://github.com/jbothe/homey-bear-blind-automation/issues",
   "source": "https://github.com/jbothe/homey-bear-blind-automation"
